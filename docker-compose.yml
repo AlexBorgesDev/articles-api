@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:5.0.8
+    restart: always
+    ports:
+      - '${DATABASE_PORT}:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DATABASE_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DATABASE_PASS}
+
+  api:
+    build: .
+    volumes:
+      - ./src:/usr/app/src
+      - ./test:/usr/app/test
+    command: yarn start:dev
+    restart: always
+    container_name: article-api
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '5'
