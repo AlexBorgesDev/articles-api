@@ -19,7 +19,7 @@ export class UserService {
   ) {}
 
   async findById(id: ObjectID) {
-    return this.userRepository.findOneBy({ id })
+    return this.userRepository.findOneById(id)
   }
 
   async findByEmail(email: string) {
@@ -45,20 +45,17 @@ export class UserService {
   async change(data: UserChangeDto, userID: ObjectID) {
     const alreadyExist = await this.findById(userID)
 
-    if (!alreadyExist) {
-      throw new UnauthorizedException('Invalid token')
-    }
+    if (!alreadyExist) throw new UnauthorizedException('Invalid token')
 
-    return this.userRepository.update({ id: userID }, data)
+    await this.userRepository.update(userID, { ...data, updatedAt: new Date() })
+    return { ...alreadyExist, ...data }
   }
 
   async delete(userID: ObjectID) {
     const alreadyExist = await this.findById(userID)
 
-    if (!alreadyExist) {
-      throw new UnauthorizedException('Invalid token')
-    }
+    if (!alreadyExist) throw new UnauthorizedException('Invalid token')
 
-    return this.userRepository.delete({ id: userID })
+    return this.userRepository.delete(userID)
   }
 }
