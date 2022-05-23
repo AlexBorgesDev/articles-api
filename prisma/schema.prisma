@@ -32,7 +32,11 @@ model Picture {
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   ownerId String
 
-  posts Post[]
+  posts      Post[]
+  postsItems PostItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("picture")
 }
@@ -42,8 +46,14 @@ model PostItem {
   tag  String
   data String
 
+  picture   Picture? @relation(fields: [pictureId], references: [id], onDelete: SetNull)
+  pictureId String?
+
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("posts_items")
 }
@@ -59,6 +69,9 @@ model Post {
 
   owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("posts")
 }
