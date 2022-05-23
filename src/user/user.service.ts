@@ -11,14 +11,14 @@ import { PrismaService } from '../prisma/prisma.service'
 
 @Injectable()
 export class UserService {
-  constructor(private service: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
   async findById(id: string) {
-    return this.service.user.findFirst({ where: { id } })
+    return this.prisma.user.findFirst({ where: { id } })
   }
 
   async findByEmail(email: string) {
-    return this.service.user.findFirst({ where: { email } })
+    return this.prisma.user.findFirst({ where: { email } })
   }
 
   async create(data: UserCreateDto) {
@@ -33,7 +33,7 @@ export class UserService {
     const salt = await bcrypt.genSalt(10)
     const passwordHash = await bcrypt.hash(data.password, salt)
 
-    return this.service.user.create({
+    return this.prisma.user.create({
       data: {
         email: data.email,
         description: data.description,
@@ -49,7 +49,7 @@ export class UserService {
 
     if (!alreadyExist) throw new UnauthorizedException('Invalid token')
 
-    return this.service.user.update({
+    return this.prisma.user.update({
       where: { id: userID },
       data: {
         email: data.email,
@@ -71,7 +71,7 @@ export class UserService {
     const salt = await bcrypt.genSalt(10)
     const passwordHash = await bcrypt.hash(data.newPassword, salt)
 
-    return this.service.user.update({
+    return this.prisma.user.update({
       where: { id: userID },
       data: { password: passwordHash },
     })
@@ -82,6 +82,6 @@ export class UserService {
 
     if (!alreadyExist) throw new UnauthorizedException('Invalid token')
 
-    return this.service.user.delete({ where: { id: userID } })
+    return this.prisma.user.delete({ where: { id: userID } })
   }
 }
