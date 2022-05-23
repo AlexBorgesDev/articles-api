@@ -5,25 +5,20 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
-import { ObjectID, Repository } from 'typeorm'
 
-import { UserChangeDto, UserCreateDto } from './user.dto'
-import { User } from './user.entity'
+import { UserChangeDto, UserChangePasswordDto, UserCreateDto } from './user.dto'
+import { PrismaService } from '../prisma/prisma.service'
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
-  ) {}
+  constructor(private service: PrismaService) {}
 
-  async findById(id: ObjectID) {
-    return this.userRepository.findOneById(id)
+  async findById(id: string) {
+    return this.service.user.findFirst({ where: { id } })
   }
 
   async findByEmail(email: string) {
-    return this.userRepository.findOneBy({ email })
+    return this.service.user.findFirst({ where: { email } })
   }
 
   async create(data: UserCreateDto) {
@@ -38,24 +33,55 @@ export class UserService {
     const salt = await bcrypt.genSalt(10)
     const passwordHash = await bcrypt.hash(data.password, salt)
 
-    const user = this.userRepository.create({ ...data, password: passwordHash })
-    return this.userRepository.save(user)
+    return this.service.user.create({
+      data: {
+        email: data.email,
+        description: data.description,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        password: passwordHash,
+      },
+    })
   }
 
-  async change(data: UserChangeDto, userID: ObjectID) {
+  async change(data: UserChangeDto, userID: string) {
     const alreadyExist = await this.findById(userID)
 
     if (!alreadyExist) throw new UnauthorizedException('Invalid token')
 
-    await this.userRepository.update(userID, { ...data, updatedAt: new Date() })
-    return { ...alreadyExist, ...data }
+    return this.service.user.update({
+      where: { id: userID },
+      data: {
+        email: data.email,
+        lastName: data.lastName,
+        firstName: data.firstName,
+        description: data.description,
+      },
+    })
   }
 
-  async delete(userID: ObjectID) {
+  async changePassword(data: UserChangePasswordDto, userID: string) {
+    const user = await this.findById(userID)
+
+    if (!user) throw new UnauthorizedException('Invalid token')
+    else if (!bcrypt.compareSync(data.currentPassword, user.password)) {
+      throw new UnauthorizedException('Invalid password')
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const passwordHash = await bcrypt.hash(data.newPassword, salt)
+
+    return this.service.user.update({
+      where: { id: userID },
+      data: { password: passwordHash },
+    })
+  }
+
+  async delete(userID: string) {
     const alreadyExist = await this.findById(userID)
 
     if (!alreadyExist) throw new UnauthorizedException('Invalid token')
 
-    return this.userRepository.delete(userID)
+    return this.service.user.delete({ where: { id: userID } })
   }
 }

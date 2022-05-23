@@ -7,9 +7,8 @@ import {
   Post,
   UnauthorizedException,
 } from '@nestjs/common'
-import { ObjectID } from 'typeorm'
 
-import { UserChangeDto, UserCreateDto } from './user.dto'
+import { UserChangeDto, UserChangePasswordDto, UserCreateDto } from './user.dto'
 import { UserService } from './user.service'
 
 import { Public } from '../auth/public.decorator'
@@ -20,7 +19,7 @@ export class UserController {
   constructor(private service: UserService) {}
 
   @Get()
-  async show(@UserID() userID: ObjectID) {
+  async show(@UserID() userID: string) {
     const user = await this.service.findById(userID)
 
     if (!user) throw new UnauthorizedException('Invalid token')
@@ -43,7 +42,7 @@ export class UserController {
   }
 
   @Patch()
-  async change(@Body() data: UserChangeDto, @UserID() userID: ObjectID) {
+  async change(@Body() data: UserChangeDto, @UserID() userID: string) {
     const userUpdated = await this.service.change(data, userID)
 
     return {
@@ -59,8 +58,17 @@ export class UserController {
     }
   }
 
+  @Patch('/password')
+  async changePassword(
+    @Body() data: UserChangePasswordDto,
+    @UserID() userID: string,
+  ) {
+    await this.service.changePassword(data, userID)
+    return { message: 'Password has been successfully changed' }
+  }
+
   @Delete()
-  async delete(@UserID() userID: ObjectID) {
+  async delete(@UserID() userID: string) {
     await this.service.delete(userID)
     return { message: 'User deleted successfully' }
   }

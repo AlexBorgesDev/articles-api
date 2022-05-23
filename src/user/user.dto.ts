@@ -55,12 +55,18 @@ export class UserChangeDto {
 
   @IsString()
   @IsOptional()
-  @MinLength(8)
-  @MaxLength(16)
-  password?: string
-
-  @IsString()
-  @IsOptional()
   @MinLength(24)
   description?: string
+}
+
+export class UserChangePasswordDto {
+  @IsString()
+  @MinLength(8)
+  @MaxLength(16)
+  currentPassword: string
+
+  @IsString()
+  @MinLength(8)
+  @MaxLength(16)
+  newPassword: string
 }
