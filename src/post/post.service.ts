@@ -144,7 +144,7 @@ export class PostService {
 
     if (!post) throw new NotFoundException('Post not found')
 
-    const itemsToUpdate = data.data?.filter(({ id }) => id) || []
+    const itemsToUpdate = data.data?.filter(item => item.id) || []
     const itemsToCreate = (data.data || []).filter(item => {
       return !item.id && item.tag && typeof item.index === 'number'
     })
