@@ -24,16 +24,16 @@ export enum PostItemTag {
 }
 
 export class PostItemDto {
-  @ApiProperty({ enum: PostItemTag })
+  @ApiProperty({ enum: PostItemTag, example: 'image' })
   @IsString()
   @IsEnum(PostItemTag, { each: true })
   tag: PostItemTag
 
-  @ApiProperty()
+  @ApiProperty({ example: '' })
   @IsString()
   data: string
 
-  @ApiProperty()
+  @ApiProperty({ minimum: 0 })
   @IsNumber()
   @IsInt()
   @Min(0)
@@ -49,14 +49,22 @@ export class PostItemDto {
 }
 
 export class PostCreateDto {
-  @ApiProperty({ example: 'this-is-the-article-slug' })
+  @ApiProperty({
+    example: 'this-is-the-article-slug',
+    minLength: 4,
+    maxLength: 200,
+  })
   @IsString()
   @MinLength(4)
   @MaxLength(200)
   @IsLowercase()
   slug: string
 
-  @ApiProperty({ example: 'This is the title of the post' })
+  @ApiProperty({
+    example: 'This is the title of the post',
+    minLength: 4,
+    maxLength: 124,
+  })
   @IsString()
   @MinLength(4)
   @MaxLength(124)
@@ -66,7 +74,7 @@ export class PostCreateDto {
   @IsUUID()
   bannerId: string
 
-  @ApiProperty()
+  @ApiProperty({ minItems: 1, isArray: true, type: PostItemDto })
   @Type(() => PostItemDto)
   @IsArray()
   @ArrayMinSize(1)
@@ -94,7 +102,7 @@ export class ChangePostItemDto {
   @IsString()
   data?: string
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, minimum: 0 })
   @IsOptional()
   @IsNumber()
   @IsInt()
@@ -115,7 +123,12 @@ export class PostChangeDto {
   @IsUUID()
   id: string
 
-  @ApiProperty({ required: false, example: 'this-is-the-article-slug' })
+  @ApiProperty({
+    required: false,
+    example: 'this-is-the-article-slug',
+    minLength: 4,
+    maxLength: 200,
+  })
   @IsString()
   @IsOptional()
   @MinLength(4)
@@ -123,7 +136,12 @@ export class PostChangeDto {
   @IsLowercase()
   slug?: string
 
-  @ApiProperty({ required: false, example: 'This is the title of the post' })
+  @ApiProperty({
+    required: false,
+    example: 'This is the title of the post',
+    minLength: 4,
+    maxLength: 124,
+  })
   @IsString()
   @IsOptional()
   @MinLength(4)
@@ -138,7 +156,12 @@ export class PostChangeDto {
   @IsUUID()
   bannerId?: string
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    required: false,
+    minItems: 1,
+    isArray: true,
+    type: ChangePostItemDto,
+  })
   @Type(() => ChangePostItemDto)
   @IsArray()
   @IsOptional()
@@ -154,14 +177,14 @@ export class PostDeleteDto {
 }
 
 export class PostPaginationDto {
-  @ApiProperty({ required: false, example: 1 })
+  @ApiProperty({ required: false, example: 1, minimum: 1 })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   @Min(1)
   page?: number
 
-  @ApiProperty({ required: false, example: 20 })
+  @ApiProperty({ required: false, example: 20, minimum: 5 })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
@@ -170,7 +193,11 @@ export class PostPaginationDto {
 }
 
 export class PostParamSlugDto {
-  @ApiProperty({ example: 'this-is-the-article-slug' })
+  @ApiProperty({
+    example: 'this-is-the-article-slug',
+    minLength: 5,
+    maxLength: 200,
+  })
   @IsString()
   @MinLength(4)
   @MaxLength(200)
