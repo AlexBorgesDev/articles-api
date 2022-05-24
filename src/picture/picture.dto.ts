@@ -21,6 +21,11 @@ export class PictureCreateServiceDto {
   description?: string
 }
 
+export class PictureCreateBodyDto extends PictureCreateDto {
+  @ApiProperty({ type: 'string', format: 'binary' })
+  file: any
+}
+
 export class PictureChangeDto {
   @ApiProperty({ example: '5e12faa1-a598-4bcb-bcf9-45e31a46d63a' })
   @IsUUID()
@@ -39,14 +44,14 @@ export class PictureDeleteDto {
 }
 
 export class PicturePaginationDto {
-  @ApiProperty({ required: false, example: 1 })
+  @ApiProperty({ required: false, example: 1, minimum: 1 })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
   @Min(1)
   page?: number
 
-  @ApiProperty({ required: false, example: 20 })
+  @ApiProperty({ required: false, example: 20, minimum: 5 })
   @IsOptional()
   @IsNumber()
   @Type(() => Number)

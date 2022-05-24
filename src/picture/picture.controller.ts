@@ -11,22 +11,35 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger'
 
 import { UserID } from '../auth/userID.decorator'
 import { MulterOptions } from '../config/multer'
 import {
   PictureChangeDto,
+  PictureCreateBodyDto,
   PictureCreateDto,
   PictureDeleteDto,
   PicturePaginationDto,
 } from './picture.dto'
 import { PictureService } from './picture.service'
+import { PictureSwagger } from './picture.swagger'
 
+@ApiBearerAuth()
+@ApiTags('Picture')
 @Controller('picture')
 export class PictureController {
   constructor(private service: PictureService) {}
 
   @Get()
+  @ApiResponse(PictureSwagger.show.ok)
+  @ApiResponse(PictureSwagger.show.unauthorized)
   async show(
     @Query() pagination: PicturePaginationDto,
     @UserID() userID: string,
@@ -46,6 +59,11 @@ export class PictureController {
   }
 
   @Post()
+  @ApiBody({ type: PictureCreateBodyDto })
+  @ApiConsumes('multipart/form-data')
+  @ApiResponse(PictureSwagger.create.bad)
+  @ApiResponse(PictureSwagger.create.success)
+  @ApiResponse(PictureSwagger.create.unauthorized)
   @UseInterceptors(FileInterceptor('file', MulterOptions.images))
   async create(
     @UploadedFile() file: Express.Multer.File,
@@ -69,6 +87,10 @@ export class PictureController {
   }
 
   @Patch()
+  @ApiResponse(PictureSwagger.change.ok)
+  @ApiResponse(PictureSwagger.change.bad)
+  @ApiResponse(PictureSwagger.change.notFound)
+  @ApiResponse(PictureSwagger.change.unauthorized)
   async change(@Body() data: PictureChangeDto, @UserID() userID: string) {
     const picture = await this.service.change(data, userID)
     return {
@@ -83,6 +105,10 @@ export class PictureController {
   }
 
   @Delete(':id')
+  @ApiResponse(PictureSwagger.delete.ok)
+  @ApiResponse(PictureSwagger.delete.bad)
+  @ApiResponse(PictureSwagger.delete.notFound)
+  @ApiResponse(PictureSwagger.delete.unauthorized)
   async delete(@Param() { id }: PictureDeleteDto, @UserID() userID: string) {
     await this.service.delete(id, userID)
     return { message: 'Picture deleted successfully' }
