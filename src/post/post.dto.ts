@@ -48,7 +48,7 @@ export class PostItemDto {
   pictureId?: string
 }
 
-export class CreatePostDto {
+export class PostCreateDto {
   @ApiProperty({ example: 'this-is-the-article-slug' })
   @IsString()
   @MinLength(4)
@@ -106,7 +106,7 @@ export class ChangePostItemDto {
   pictureId?: string
 }
 
-export class ChangePostDto {
+export class PostChangeDto {
   @ApiProperty({ example: '1d7624c1-a0c8-44a6-b2f3-332d7e63924e' })
   @IsUUID()
   id: string
@@ -143,7 +143,7 @@ export class ChangePostDto {
   data?: ChangePostItemDto[]
 }
 
-export class DeletePostDto {
+export class PostDeleteDto {
   @ApiProperty({ example: '1d7624c1-a0c8-44a6-b2f3-332d7e63924e' })
   @IsUUID()
   id: string

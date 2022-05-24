@@ -7,8 +7,8 @@ import {
 
 import { PrismaService } from '../prisma/prisma.service'
 import {
-  ChangePictureDto,
-  CreatePictureServiceDto,
+  PictureChangeDto,
+  PictureCreateServiceDto,
   PicturePaginationDto,
 } from './picture.dto'
 import { deletePictures } from './picture.utils'
@@ -26,7 +26,7 @@ export class PictureService {
     })
   }
 
-  async create(data: CreatePictureServiceDto, userID: string) {
+  async create(data: PictureCreateServiceDto, userID: string) {
     const user = await this.prisma.user.findFirst({ where: { id: userID } })
 
     if (!user) {
@@ -46,7 +46,7 @@ export class PictureService {
     }
   }
 
-  async change(data: ChangePictureDto, userID: string) {
+  async change(data: PictureChangeDto, userID: string) {
     const picture = await this.prisma.picture.findFirst({
       where: { id: data.id, ownerId: userID },
     })

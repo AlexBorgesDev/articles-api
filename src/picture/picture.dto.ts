@@ -2,14 +2,14 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator'
 import { Type } from 'class-transformer'
 
-export class CreatePictureDto {
+export class PictureCreateDto {
   @ApiProperty({ required: false })
   @IsString()
   @IsOptional()
   description?: string
 }
 
-export class CreatePictureServiceDto {
+export class PictureCreateServiceDto {
   @IsNumber()
   size: number
 
@@ -21,7 +21,7 @@ export class CreatePictureServiceDto {
   description?: string
 }
 
-export class ChangePictureDto {
+export class PictureChangeDto {
   @ApiProperty({ example: '5e12faa1-a598-4bcb-bcf9-45e31a46d63a' })
   @IsUUID()
   id: string

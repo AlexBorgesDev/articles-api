@@ -13,9 +13,9 @@ import { Public } from '../auth/public.decorator'
 import { UserID } from '../auth/userID.decorator'
 
 import {
-  ChangePostDto,
-  CreatePostDto,
-  DeletePostDto,
+  PostChangeDto,
+  PostCreateDto,
+  PostDeleteDto,
   PostPaginationDto,
   PostParamIdDto,
   PostParamSlugDto,
@@ -46,19 +46,19 @@ export class PostController {
   }
 
   @Post()
-  async create(@Body() data: CreatePostDto, @UserID() userID: string) {
+  async create(@Body() data: PostCreateDto, @UserID() userID: string) {
     const post = await this.service.create(data, userID)
     return { message: 'Post created successfully', slug: post.slug }
   }
 
   @Patch()
-  async change(@Body() data: ChangePostDto, @UserID() userID: string) {
+  async change(@Body() data: PostChangeDto, @UserID() userID: string) {
     const post = await this.service.change(data, userID)
     return { message: 'Post updated successfully', slug: post.slug }
   }
 
   @Delete(':id')
-  async delete(@Param() { id }: DeletePostDto, @UserID() userID: string) {
+  async delete(@Param() { id }: PostDeleteDto, @UserID() userID: string) {
     await this.service.delete(id, userID)
     return { message: 'Post deleted successfully' }
   }

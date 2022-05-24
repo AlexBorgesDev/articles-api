@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common'
 
 import { PrismaService } from '../prisma/prisma.service'
-import { ChangePostDto, CreatePostDto, PostPaginationDto } from './post.dto'
+import { PostChangeDto, PostCreateDto, PostPaginationDto } from './post.dto'
 
 @Injectable()
 export class PostService {
@@ -104,7 +104,7 @@ export class PostService {
     })
   }
 
-  async create(data: CreatePostDto, userID: string) {
+  async create(data: PostCreateDto, userID: string) {
     const user = await this.service.user.findFirst({ where: { id: userID } })
 
     if (!user) throw new UnauthorizedException('Invalid token')
@@ -137,7 +137,7 @@ export class PostService {
     })
   }
 
-  async change({ id, ...data }: ChangePostDto, userID: string) {
+  async change({ id, ...data }: PostChangeDto, userID: string) {
     const post = await this.service.post.findFirst({
       where: { id, ownerId: userID },
     })

@@ -15,8 +15,8 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { UserID } from '../auth/userID.decorator'
 import { MulterOptions } from '../config/multer'
 import {
-  ChangePictureDto,
-  CreatePictureDto,
+  PictureChangeDto,
+  PictureCreateDto,
   PictureDeleteDto,
   PicturePaginationDto,
 } from './picture.dto'
@@ -50,7 +50,7 @@ export class PictureController {
   async create(
     @UploadedFile() file: Express.Multer.File,
     @UserID() userID: string,
-    @Body() { description }: CreatePictureDto,
+    @Body() { description }: PictureCreateDto,
   ) {
     const picture = await this.service.create(
       { filename: file.filename, size: file.size, description },
@@ -69,7 +69,7 @@ export class PictureController {
   }
 
   @Patch()
-  async change(@Body() data: ChangePictureDto, @UserID() userID: string) {
+  async change(@Body() data: PictureChangeDto, @UserID() userID: string) {
     const picture = await this.service.change(data, userID)
     return {
       message: 'Picture changed successfully',
