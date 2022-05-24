@@ -42,9 +42,10 @@ model Picture {
 }
 
 model PostItem {
-  id   String @id @default(uuid())
-  tag  String
-  data String
+  id    String @id @default(uuid())
+  tag   String
+  data  String
+  index Int
 
   picture   Picture? @relation(fields: [pictureId], references: [id], onDelete: SetNull)
   pictureId String?
