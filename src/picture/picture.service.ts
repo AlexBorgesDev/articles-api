@@ -22,6 +22,7 @@ export class PictureService {
       where: { ownerId: userID },
       skip: pagination.take || 20 * ((pagination.page || 1) - 1),
       take: pagination.take || 20,
+      orderBy: { createdAt: 'desc' },
     })
   }
 
