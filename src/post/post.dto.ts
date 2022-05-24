@@ -75,9 +75,13 @@ export class PostCreateDto {
 }
 
 export class ChangePostItemDto {
-  @ApiProperty({ example: 'be6c862e-ad7f-4d17-aaea-84d2b646bc83' })
+  @ApiProperty({
+    required: false,
+    example: 'be6c862e-ad7f-4d17-aaea-84d2b646bc83',
+  })
+  @IsOptional()
   @IsUUID()
-  id: string
+  id?: string
 
   @ApiProperty({ required: false, enum: PostItemTag })
   @IsOptional()
