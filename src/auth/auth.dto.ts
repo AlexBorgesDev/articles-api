@@ -7,7 +7,7 @@ export class AuthLoginDto {
   @IsString()
   email: string
 
-  @ApiProperty()
+  @ApiProperty({ example: '123456789', minLength: 8, maxLength: 16 })
   @IsString()
   @MinLength(8)
   @MaxLength(16)
