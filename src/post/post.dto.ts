@@ -195,7 +195,7 @@ export class PostPaginationDto {
 export class PostParamSlugDto {
   @ApiProperty({
     example: 'this-is-the-article-slug',
-    minLength: 5,
+    minLength: 4,
     maxLength: 200,
   })
   @IsString()
