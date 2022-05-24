@@ -1,6 +1,6 @@
 import { ApiResponseOptions } from '@nestjs/swagger'
 
-import { AuthSwaggerTypes } from './auth.swagger-type'
+import { AuthSwaggerTypes } from './auth.swagger-types'
 
 // ----------- login -----------
 class AuthSwaggerLogin {
