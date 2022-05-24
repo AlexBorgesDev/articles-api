@@ -14,7 +14,7 @@ import { UserService } from './user.service'
 
 import { Public } from '../auth/public.decorator'
 import { UserID } from '../auth/userID.decorator'
-import { UserSwagger } from './swagger.user'
+import { UserSwagger } from './user.swagger'
 
 @ApiTags('User')
 @Controller('user')

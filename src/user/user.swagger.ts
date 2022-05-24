@@ -1,6 +1,6 @@
 import { ApiResponseOptions } from '@nestjs/swagger'
 
-import { UserSwaggerTypes } from './swagger-types.user'
+import { UserSwaggerTypes } from './user.swagger-types'
 
 // ----------- show -----------
 class UserSwaggerShow {
