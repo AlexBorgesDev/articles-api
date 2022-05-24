@@ -144,6 +144,11 @@ export class PostService {
 
     if (!post) throw new NotFoundException('Post not found')
 
+    const itemsToUpdate = data.data?.filter(({ id }) => id) || []
+    const itemsToCreate = (data.data || []).filter(item => {
+      return !item.id && item.tag && typeof item.index === 'number'
+    })
+
     return this.service.post.update({
       where: { id },
       data: {
@@ -151,7 +156,15 @@ export class PostService {
         title: data.title,
         bannerId: data.bannerId,
         data: {
-          updateMany: data.data?.map(item => ({
+          createMany: {
+            data: itemsToCreate.map(item => ({
+              tag: item.tag,
+              data: item.data || '',
+              index: item.index,
+              pictureId: item.pictureId,
+            })),
+          },
+          updateMany: itemsToUpdate.map(item => ({
             where: { id: item.id, postId: id },
             data: {
               tag: item.tag,
