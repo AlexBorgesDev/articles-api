@@ -1,12 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 // ----------- generics -----------
+class AuthUnauthorizedType {
+  @ApiProperty({ default: 401 })
+  statusCode: number
+
+  @ApiProperty({ default: 'Email or password is invalid' })
+  message: string
+
+  @ApiProperty({ default: 'Unauthorized' })
+  error: string
+}
+
 class AuthInputType {
   @ApiProperty({ default: 400 })
   statusCode: number
 
-  @ApiProperty({ example: 'Email or password is invalid' })
-  message: string
+  @ApiProperty({
+    example: ['password must be longer than or equal to 8 characters'],
+  })
+  message: string[]
 
   @ApiProperty({ default: 'Bad Request' })
   error: string
@@ -45,5 +58,6 @@ export class AuthSwaggerTypes {
   static login = {
     ok: AuthLoginOkType,
     bad: AuthInputType,
+    unauthorized: AuthUnauthorizedType,
   }
 }

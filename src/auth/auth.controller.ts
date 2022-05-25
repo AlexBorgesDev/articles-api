@@ -16,6 +16,7 @@ export class AuthController {
   @HttpCode(200)
   @ApiResponse(AuthSwagger.login.ok)
   @ApiResponse(AuthSwagger.login.bad)
+  @ApiResponse(AuthSwagger.login.unauthorized)
   async login(@Body() credential: AuthLoginDto) {
     return await this.service.login(credential)
   }

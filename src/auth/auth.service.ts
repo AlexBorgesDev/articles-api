@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt'
 
 import { JwtService } from '@nestjs/jwt'
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 
 import { UserService } from '../user/user.service'
 import { AuthLoginDto } from './auth.dto'
@@ -18,7 +18,7 @@ export class AuthService {
     const user = await this.userService.findByEmail(email)
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
-      throw new BadRequestException('Email or password is invalid')
+      throw new UnauthorizedException('Email or password is invalid')
     }
 
     const payload: Payload = { sub: user.id }

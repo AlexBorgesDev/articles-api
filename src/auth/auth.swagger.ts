@@ -13,6 +13,11 @@ class AuthSwaggerLogin {
     status: 400,
     type: AuthSwaggerTypes.login.bad,
   }
+
+  unauthorized: ApiResponseOptions = {
+    status: 401,
+    type: AuthSwaggerTypes.login.unauthorized,
+  }
 }
 
 // --------------------------------------------
