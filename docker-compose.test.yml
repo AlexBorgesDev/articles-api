@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:14.3-alpine
+    restart: always
+    ports:
+      - '${DATABASE_PORT}:5432'
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASS}
+
+  api:
+    build: .
+    volumes:
+      - ./src:/usr/app/src
+      - ./test:/usr/app/test
+      - ./prisma:/usr/app/prisma
+    command: sh -c "yarn prisma migrate dev && yarn start:dev"
+    restart: always
+    container_name: article-api-test
+    env_file:
+      - .env
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '5'
