@@ -29,8 +29,8 @@ model Picture {
   filename    String  @unique
   description String?
 
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
-  ownerId String
+  owner   User?   @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  ownerId String?
 
   posts      Post[]
   postsItems PostItem[]
