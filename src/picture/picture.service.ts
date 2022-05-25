@@ -20,7 +20,7 @@ export class PictureService {
   async getAllByOwner(pagination: PicturePaginationDto, userID: string) {
     return this.prisma.picture.findMany({
       where: { ownerId: userID },
-      skip: pagination.take || 20 * ((pagination.page || 1) - 1),
+      skip: (pagination.take || 20) * ((pagination.page || 1) - 1),
       take: pagination.take || 20,
       orderBy: { createdAt: 'desc' },
     })

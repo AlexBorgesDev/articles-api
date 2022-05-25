@@ -75,7 +75,7 @@ export class PostService {
 
   async getAll(pagination: PostPaginationDto) {
     return this.service.post.findMany({
-      skip: pagination.take || 20 * ((pagination.page || 1) - 1),
+      skip: (pagination.take || 20) * ((pagination.page || 1) - 1),
       take: pagination.take || 20,
       select: {
         slug: true,
@@ -90,7 +90,7 @@ export class PostService {
   async getAllByUser(pagination: PostPaginationDto, userID: string) {
     return this.service.post.findMany({
       where: { ownerId: userID },
-      skip: pagination.take || 20 * ((pagination.page || 1) - 1),
+      skip: (pagination.take || 20) * ((pagination.page || 1) - 1),
       take: pagination.take || 20,
       orderBy: { createdAt: 'desc' },
       select: {
