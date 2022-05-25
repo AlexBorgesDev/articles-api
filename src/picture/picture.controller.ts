@@ -38,9 +38,9 @@ export class PictureController {
   constructor(private service: PictureService) {}
 
   @Get()
-  @ApiResponse(PictureSwagger.show.ok)
-  @ApiResponse(PictureSwagger.show.unauthorized)
-  async show(
+  @ApiResponse(PictureSwagger.index.ok)
+  @ApiResponse(PictureSwagger.index.unauthorized)
+  async index(
     @Query() pagination: PicturePaginationDto,
     @UserID() userID: string,
   ) {

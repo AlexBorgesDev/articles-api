@@ -48,15 +48,15 @@ class PicturePictureType {
   size: number
 }
 
-// ----------- show -----------
-class PictureShowOkType {
+// ----------- index -----------
+class PictureIndexOkType {
   @ApiProperty({ minimum: 1, example: 1 })
   page: number
 
   @ApiProperty({ minimum: 5, example: 20 })
   take: number
 
-  @ApiProperty({ type: PicturePictureType })
+  @ApiProperty({ isArray: true, type: PicturePictureType })
   data: PicturePictureType[]
 
   @ApiProperty({ minimum: 0, example: 1 })
@@ -102,8 +102,8 @@ class PictureDeleteOkType {
 // --------------------------------------------
 
 export class PictureSwaggerTypes {
-  static show = {
-    ok: PictureShowOkType,
+  static index = {
+    ok: PictureIndexOkType,
     unauthorized: PictureUnauthorizedType,
   }
 

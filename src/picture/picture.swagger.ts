@@ -2,16 +2,16 @@ import { ApiResponseOptions } from '@nestjs/swagger'
 
 import { PictureSwaggerTypes } from './picture.swagger-types'
 
-// ----------- show -----------
-class PictureSwaggerShow {
+// ----------- index -----------
+class PictureSwaggerIndex {
   ok: ApiResponseOptions = {
     status: 200,
-    type: PictureSwaggerTypes.show.ok,
+    type: PictureSwaggerTypes.index.ok,
   }
 
   unauthorized: ApiResponseOptions = {
     status: 401,
-    type: PictureSwaggerTypes.show.unauthorized,
+    type: PictureSwaggerTypes.index.unauthorized,
   }
 }
 
@@ -83,7 +83,7 @@ class PictureSwaggerDelete {
 // --------------------------------------------
 
 export class PictureSwagger {
-  static show = new PictureSwaggerShow()
+  static index = new PictureSwaggerIndex()
 
   static create = new PictureSwaggerCreate()
 
