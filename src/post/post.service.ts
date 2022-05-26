@@ -20,7 +20,7 @@ export class PostService {
   }
 
   async getById(id: string, userID: string) {
-    const post = this.service.post.findFirst({
+    const post = await this.service.post.findFirst({
       where: { id, ownerId: userID },
       select: {
         id: true,
