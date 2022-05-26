@@ -360,6 +360,7 @@ export class PostSwaggerTypes {
   static showById = {
     ok: PostShowByIdOkType,
     bad: PostInputIdType,
+    notFound: PostNotFountType,
     unauthorized: PostUnauthorizedType,
   }
 }

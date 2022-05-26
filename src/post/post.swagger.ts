@@ -140,6 +140,11 @@ class PostSwaggerShowById {
     type: PostSwaggerTypes.showById.bad,
   }
 
+  notFound: ApiResponseOptions = {
+    status: 404,
+    type: PostSwaggerTypes.showById.notFound,
+  }
+
   unauthorized: ApiResponseOptions = {
     status: 401,
     type: PostSwaggerTypes.showById.unauthorized,

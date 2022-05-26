@@ -61,6 +61,7 @@ export class PostController {
   @ApiBearerAuth()
   @ApiResponse(PostSwagger.showById.ok)
   @ApiResponse(PostSwagger.showById.bad)
+  @ApiResponse(PostSwagger.showById.notFound)
   @ApiResponse(PostSwagger.showById.unauthorized)
   async showById(@Param() { id }: PostParamIdDto, @UserID() userID: string) {
     return await this.service.getById(id, userID)
