@@ -125,6 +125,46 @@ describe('PostController (e2e)', () => {
     })
   })
 
+  describe('/post/:slug (GET)', () => {
+    it('should return the post', async () => {
+      const newPost = await prisma.post.create({
+        data: {
+          slug: `${Date.now()}-get-post-by-slug`,
+          title: '/post/:slug (GET) - Test',
+          bannerId: picture.id,
+          data: { create: { tag: 'text', data: '', index: 0 } },
+          ownerId: usersId.exist,
+        },
+      })
+
+      const { status, body } = await request(app.getHttpServer()).get(
+        `/post/${newPost.slug}`,
+      )
+
+      expect(status).toBe(200)
+      expect(body).toHaveProperty('slug')
+      expect(body).toHaveProperty('title')
+      expect(body).toHaveProperty('banner')
+      expect(body).toHaveProperty('data')
+      expect(body).toHaveProperty('owner')
+      expect(body).toHaveProperty('createdAt')
+      expect(body.banner).toHaveProperty('filename')
+      expect(Array.isArray(body.data)).toBe(true)
+    })
+
+    describe('should return an HTTP status 400', () => {
+      it('when the informed slug is invalid', async () => {
+        const { status, body } = await request(app.getHttpServer()).get(
+          '/post/in',
+        )
+
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message')
+        expect(Array.isArray(body.message)).toBe(true)
+      })
+    })
+  })
+
   describe('/post (POST)', () => {
     it('should create a post successfully', async () => {
       const slug = `${Date.now()}-create-post-e2e-test`
@@ -383,6 +423,170 @@ describe('PostController (e2e)', () => {
           statusCode: 404,
           message: 'Post not found',
           error: 'Not Found',
+        })
+      })
+    })
+  })
+
+  describe('/post/user (GET)', () => {
+    it('should return with pagination, the posts', async () => {
+      await prisma.post.create({
+        data: {
+          slug: `${Date.now()}-get-user-slug`,
+          title: '/post/user (GET) - Test',
+          bannerId: picture.id,
+          data: { create: { tag: 'text', data: '', index: 0 } },
+          ownerId: usersId.exist,
+        },
+      })
+
+      const { status, body } = await request(app.getHttpServer())
+        .get('/post/user')
+        .set('authorization', accessToken.exist)
+        .query({ page: 1, take: 18 })
+
+      expect(status).toBe(200)
+      expect(body).toHaveProperty('page')
+      expect(body).toHaveProperty('take')
+      expect(body).toHaveProperty('data')
+      expect(body).toHaveProperty('total')
+      expect(Array.isArray(body.data)).toBe(true)
+    })
+
+    describe('should return an HTTP status 400', () => {
+      it('when the informed queries are invalid', async () => {
+        const { status, body } = await request(app.getHttpServer())
+          .get('/post/user')
+          .set('authorization', accessToken.exist)
+          .query({ page: 0, take: false })
+
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message')
+        expect(Array.isArray(body.message)).toBe(true)
+      })
+    })
+
+    describe('should return an HTTP status 401', () => {
+      it('when the token is invalid', async () => {
+        const { status, body } = await request(app.getHttpServer()).get(
+          '/post/user',
+        )
+
+        expect(status).toBe(401)
+        expect(body).toMatchObject({
+          statusCode: 401,
+          message: 'Unauthorized',
+        })
+      })
+    })
+  })
+
+  describe('/post/user/:id (GET)', () => {
+    it('should return the post', async () => {
+      const newPost = await prisma.post.create({
+        data: {
+          slug: `${Date.now()}-get-post-by-id`,
+          title: '/post/:slug (GET) - Test',
+          bannerId: picture.id,
+          data: { create: { tag: 'text', data: '', index: 0 } },
+          ownerId: usersId.exist,
+        },
+      })
+
+      const { status, body } = await request(app.getHttpServer())
+        .get(`/post/user/${newPost.id}`)
+        .set('authorization', accessToken.exist)
+
+      expect(status).toBe(200)
+      expect(body).toHaveProperty('id')
+      expect(body).toHaveProperty('slug')
+      expect(body).toHaveProperty('title')
+      expect(body).toHaveProperty('banner')
+      expect(body).toHaveProperty('data')
+      expect(body).toHaveProperty('createdAt')
+      expect(body).toHaveProperty('updatedAt')
+      expect(body.banner).toHaveProperty('id')
+      expect(body.banner).toHaveProperty('filename')
+      expect(Array.isArray(body.data)).toBe(true)
+    })
+
+    describe('should return an HTTP status 400', () => {
+      it('when the given id is invalid', async () => {
+        const { status, body } = await request(app.getHttpServer())
+          .get('/post/user/1i2d')
+          .set('authorization', accessToken.exist)
+
+        expect(status).toBe(400)
+        expect(body).toMatchObject({
+          statusCode: 400,
+          message: ['id must be a UUID'],
+          error: 'Bad Request',
+        })
+      })
+    })
+
+    describe('should return an HTTP status 401', () => {
+      it('when the token is invalid', async () => {
+        const { status, body } = await request(app.getHttpServer()).get(
+          `/post/user/${uuid()}`,
+        )
+
+        expect(status).toBe(401)
+        expect(body).toMatchObject({
+          statusCode: 401,
+          message: 'Unauthorized',
+        })
+      })
+    })
+
+    describe('should return an HTTP status 404', () => {
+      it('when the post does not exist', async () => {
+        const { status, body } = await request(app.getHttpServer())
+          .get(`/post/user/${uuid()}`)
+          .set('authorization', accessToken.exist)
+
+        expect(status).toBe(404)
+        expect(body).toMatchObject({
+          statusCode: 404,
+          message: 'Post not found',
+          error: 'Not Found',
+        })
+      })
+    })
+  })
+
+  describe('/post/check/:slug (GET)', () => {
+    it('should return a JSON saying if the slug is already being used or not', async () => {
+      const { status, body } = await request(app.getHttpServer())
+        .get(`/post/check/${Date.now()}-check-slug`)
+        .set('authorization', accessToken.exist)
+
+      expect(status).toBe(200)
+      expect(body).toMatchObject({ slugAlreadyExist: false })
+    })
+
+    describe('should return an HTTP status 400', () => {
+      it('when the informed slug is invalid', async () => {
+        const { status, body } = await request(app.getHttpServer())
+          .get('/post/check/in')
+          .set('authorization', accessToken.exist)
+
+        expect(status).toBe(400)
+        expect(body).toHaveProperty('message')
+        expect(Array.isArray(body.message)).toBe(true)
+      })
+    })
+
+    describe('should return an HTTP status 401', () => {
+      it('when the token is invalid', async () => {
+        const { status, body } = await request(app.getHttpServer()).get(
+          `/post/check/${Date.now()}-check-slug`,
+        )
+
+        expect(status).toBe(401)
+        expect(body).toMatchObject({
+          statusCode: 401,
+          message: 'Unauthorized',
         })
       })
     })
