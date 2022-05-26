@@ -1,8 +1,8 @@
 {
   "name": "articles-api",
   "version": "1.0.0",
-  "description": "",
-  "author": "",
+  "description": "Articles is a REST API built with Nestjs. With the purpose of maintaining the entire ecosystem of a blog. Providing CRUD functionality for: users, post and images. With authentication being done using jwt token.",
+  "author": "Alex Borges Ramos (https://github.com/AlexBorgesDev)",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -19,6 +19,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlexBorgesDev/articles-api.git"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
