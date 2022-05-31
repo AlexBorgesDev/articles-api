@@ -5,7 +5,7 @@ Articles is a REST API built with Nest. With the purpose of maintaining the enti
 ## Installation
 
 ```bash
-  npm install
+npm install
 ```
 
 ## Environment Variables
