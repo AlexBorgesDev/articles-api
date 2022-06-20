@@ -66,7 +66,7 @@ $ npm run test:cov
 
 ## Documentation
 
-See the [documentation here](https://app.swaggerhub.com/apis-docs/AlexBorgesDev/Articles-API/1.0.0).
+See the [documentation here](https://app.swaggerhub.com/apis-docs/AlexBorgesDev/Articles-API).
 
 Or if the application is running, access the `/docs` route.
 
