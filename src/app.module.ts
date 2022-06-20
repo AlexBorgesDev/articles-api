@@ -10,6 +10,7 @@ import { UserModule } from './user/user.module'
 import { JwtAuthGuard } from './auth/jwt-auth.guard'
 import { PictureModule } from './picture/picture.module'
 import { PostModule } from './post/post.module'
+import { SearchModule } from './search/search.module'
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PostModule } from './post/post.module'
     AuthModule,
     PictureModule,
     PostModule,
+    SearchModule,
     ServeStaticModule.forRoot({
       serveRoot: '/files',
       rootPath: Paths.localUploads,
