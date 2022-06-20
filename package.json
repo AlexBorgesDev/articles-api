@@ -1,6 +1,6 @@
 {
   "name": "articles-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Articles is a REST API built with Nestjs. With the purpose of maintaining the entire ecosystem of a blog. Providing CRUD functionality for: users, post and images. With authentication being done using jwt token.",
   "author": "Alex Borges Ramos (https://github.com/AlexBorgesDev)",
   "private": true,
